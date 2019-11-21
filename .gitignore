@@ -1,0 +1,4 @@
+config/.env
+config/credentials.json
+.bundle
+vendor

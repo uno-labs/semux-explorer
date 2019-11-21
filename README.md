@@ -1,0 +1,6 @@
+- cp 'config/.env.default' 'config/.env'
+- edit 'config/.env' to fit your environment
+- cp 'config/credentials.json.default' 'config/credentials.json'
+- put proper backend credentials into 'config/credentials.json'
+- run `bundle install`
+- run `bin/run`

@@ -1,0 +1,74 @@
+@media (min-width: 768px) {
+  .dl-horizontal dt {
+    float: left;
+    width: 200px;
+    clear: left;
+    text-align: right;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .dl-horizontal dd {
+    margin-left: 220px;
+  }
+}
+
+.dl-horizontal dd:before, .dl-horizontal dd:after, {
+  display: table;
+  content: " ";
+}
+
+.dl-horizontal dd:after {
+  clear: both;
+}
+
+body {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.align-10 { padding-right: 10ch !important }
+.align-9 { padding-right: 9ch !important }
+.align-8 { padding-right: 8ch !important }
+.align-7 { padding-right: 7ch !important }
+.align-6 { padding-right: 6ch !important }
+.align-5 { padding-right: 5ch !important }
+.align-4 { padding-right: 4ch !important }
+.align-3 { padding-right: 3ch !important }
+.align-2 { padding-right: 2ch !important }
+.align-1 { padding-right: 1ch !important }
+.align-0 { padding-right: 0ch !important }
+
+tfoot {
+  border-top: 1px solid #aaa;
+  color: #fff;
+}
+.align-sem {
+  display: inline-block;
+  width: 20ch;
+}
+
+td sub {
+  font-size: 1.25em;
+  bottom: -0.33em;
+  padding-left: 0.25em;
+}
+details kbd {
+  background-color: inherit;
+}
+details pre {
+  background-color: #00bc8c;
+}
+.error pre {
+  Rwhite-space: inherit;
+}
+td:first-child, th:first-child {
+  padding-left: 0;
+}
+td:last-child, th:last-child {
+  padding-right: 0;
+}
+.navbar {
+  padding-left: calc(1.25rem + 1px);
+  padding-right: calc(1.25rem + 1px);
+}

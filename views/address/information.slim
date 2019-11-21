@@ -1,0 +1,40 @@
+section.card.information.address-information
+  .card-body
+    h5.card-title Address information
+    dl.dl-horizontal
+      dt Address
+      dd
+        == address_link(@address.addr, hex: true, name: false)
+        = ' '
+        == external_link :'semux.info', :address, @address.addr
+      
+      dt State
+      dd
+        == delegate_state_badge(@address.state)
+        - if !@address.name.to_s.empty?
+          = ' '
+          == address_link(@address.addr, hex: false)
+
+      dt Total balance
+      dd== sem_span @address.total_balance
+
+      dt Spendable
+      dd== sem_span @address.spendable_balance
+
+      dt Locked
+      dd== sem_span @address.vote_balance
+
+      dt Creation block
+      dd
+        - if @address.create_block_id == -1
+          | genesis
+        - else
+          == block_link(@address.create_block_id)
+          = ' '
+          == external_link :'semux.info', :block, @address.create_block_id
+
+      dt Transaction count
+      dd
+        == "#{@address.transactions_count} "
+        = ' '
+        == external_link :'semux.info', :address_transactions, @address.addr

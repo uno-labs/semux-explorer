@@ -1,0 +1,12 @@
+== render 'part/nav'
+
+== render 'address/information'
+
+- if !@address.delegate_state.to_h.empty?
+  == render 'delegate/information'
+  == render 'delegate/votes'
+
+- if @transactions && !@transactions.empty?
+  == render 'transactions'
+
+== render 'debug'

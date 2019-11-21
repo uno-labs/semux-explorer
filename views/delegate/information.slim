@@ -1,0 +1,13 @@
+section.card.information.delegate-information
+  .card-body
+    h5.card-title Delegate information
+    dl.dl-horizontal
+      dt Name
+      dd= @address.name
+
+      dt Forged blocks
+      dd= @address.delegate_state.blocks_forged_hit
+
+      /- if @address.delegate_state.blocks_forged_miss
+        dt Missed blocks
+        dd= @address.delegate_state.blocks_forged_miss

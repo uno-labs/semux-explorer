@@ -1,0 +1,23 @@
+doctype html
+html lang="en"
+  - version = '0'
+  head
+    meta charset="utf-8"
+    title= page_title
+    - if page_description
+      meta name="description" content=page_description
+    meta name="viewport" content="width=device-width, initial-scale=1"
+    meta http-equiv="X-UA-Compatible" content="IE=edge"
+    meta name="google" content="notranslate"
+
+    link rel="shortcut icon" href="/favicon.ico"
+    /link rel="stylesheet" href="/css/fontawesome-all-5.9.0.min.css"
+    link rel="stylesheet" href="/css/bootstrap-darkly-4.3.1.min.css"
+    link rel="stylesheet" href="/css/app.css?v=#{version}"
+
+  body id="top"
+    #yield== yield
+
+    /script src="/js/jquery-3.4.1.slim.min.js"
+    /script src="/js/app.js?v=#{version}"
+    /script src="/js/bootstrap-4.3.1.min.js"

@@ -1,0 +1,27 @@
+== render 'part/nav'
+
+section.card.delegates-list
+  .card-body
+    h5.card-title Delegates
+    h6.card-subtitle.text-muted total #{@delegates.count}
+
+    table.table.table-borderless.table-sm.w-auto
+      - @rank = 0
+      tr
+        th Rank
+        th Name
+        th Status
+        th Votes
+        th.pl-2 Forged
+        th Address
+      - @delegates.each do |delegate|
+        - @rank += 1
+        tr
+          td== @rank
+          td== address_link(delegate.addr)
+          td== delegate_state_badge(delegate.state)
+          == sem_td(delegate.delegate_state ? delegate.delegate_state.votes_sum : 0)
+          td.text-muted.text-right== delegate.delegate_state && delegate.delegate_state.blocks_forged_hit
+          td== address_link(delegate.addr, name: false, hex: true)
+
+== render 'debug'

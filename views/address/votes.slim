@@ -1,0 +1,24 @@
+section.card.votes.votes-by-address
+  .card-body
+    h5.card-title Votes by this address
+    h6.card-subtitle.text-muted total #{@address.votes_dist.to_h.count}
+
+    table.table.table-borderless.table-sm.w-auto
+      tr
+        th
+        th For Delegate
+        th Votes
+
+      - total = 0
+      - votes = @address.votes_dist.to_h.sort_by(&:last).reverse
+      - votes.each_with_index do |(address, sem), index|
+        - total += sem
+        tr
+          td= index + 1
+          td== address_link(address)
+          == sem_td(sem)
+      tfoot
+        tr
+          td
+          td Total SEM
+          == sem_td(total)

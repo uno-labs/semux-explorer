@@ -1,0 +1,20 @@
+- detailed_infos = [:address, :block, :transactions, :info].map{ |var| details(var) }.compact
+
+aside.card.debug
+  - if detailed_infos.any?
+    .card-body
+      - detailed_infos.each do |info|
+        == info
+  .card-footer.text-muted
+    .row
+      .col-md
+        small
+          | powered by ruby roda
+      .col-md.text-right
+        small
+          | render time #{"%.9f" % (Time.now - @request_start_time - API.last_request_time.to_f)}
+          br
+          - if API.last_request_time
+            | backend request time #{"%.9f" % API.last_request_time}
+          - else
+            | backend request cached
