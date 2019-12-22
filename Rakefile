@@ -7,7 +7,7 @@ irb = proc do |env|
   else
     "#{FileUtils::RUBY} -S irb"
   end
-  sh "#{cmd} -r ./app/api.rb"
+  sh "#{cmd} -r ./lib/semux_explorer.rb"
 end
 
 desc "Open irb shell in development mode"

@@ -13,13 +13,62 @@
   }
 }
 
-.dl-horizontal dd:before, .dl-horizontal dd:after, {
-  display: table;
-  content: " ";
+@media (max-width: 767px) {
+  .dl-horizontal dl { position: relative }
+  .dl-horizontal dd, .dl-horizontal dt {
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 100%;
+    margin-bottom: 0.8em;
+  }
+  .dl-horizontal dd {
+    width: 80%;
+    word-wrap: break-word;
+  }
+  .dl-horizontal dt {
+    width: 19%;
+    text-align: right;
+    padding-right: 0.2rem;
+  }
+
+  .card-body { padding: 0.5rem }
+  .votes table td:nth-of-type(2) a {
+    font-size: 75%;
+  }
+  .votes table td { padding-top: 0; padding-bottom: 0; margin-bottom: 0 }
+  .delegates-list table td:last-child, .delegates-list table th:last-child { display: none; }
 }
 
-.dl-horizontal dd:after {
-  clear: both;
+@media (max-width: 899px) {
+  .transactions table, .transactions thead, .transactions tbody, .transactions tr {
+    display: block;
+    position: relative;
+  } 
+  .transactions tr {
+    border-bottom: 1px solid #999;
+  }
+  .transactions td, .transactions th {
+    display: inline-block;
+    width: 33.333%;
+    text-align: left;
+  }
+  .transactions td { padding: 0; white-space: nowrap; }
+  .transactions tr { padding: 0.4rem 0; }
+
+  .transactions td:nth-of-type(1) { width: 40%; }
+  .transactions td:nth-of-type(2) { width: 40%; }
+  .transactions td:nth-of-type(3) { width: 20%; }
+  .transactions td:nth-of-type(4) { width: 35%; }
+  .transactions td:nth-of-type(5) { width: 35%; }
+  .transactions td:nth-of-type(6) { width: 30%; }
+
+  .transactions td:nth-of-type(1):before { content: "Hash: "; font-size: 75% }
+  .transactions td:nth-of-type(3) { text-align: right; }
+  .transactions td:nth-of-type(6) { text-align: right; }
+  .transactions td:nth-of-type(4):before { content: "From: "; font-size: 75% }
+  .transactions td:nth-of-type(5):before { content: "To: "; font-size: 75% }
+  .transactions td time { font-size: 75% }
+  .transactions thead { display: none }
 }
 
 body {
@@ -68,7 +117,42 @@ td:first-child, th:first-child {
 td:last-child, th:last-child {
   padding-right: 0;
 }
-.navbar {
-  padding-left: calc(1.25rem + 1px);
-  padding-right: calc(1.25rem + 1px);
+
+.navbar-brand img {
+  height: 2rem;
+  margin: -0.5rem 0.2rem -0.5rem -0.3rem;
+}
+
+#instantclick {
+  pointer-events: none;
+  z-index: 2147483647;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  color: hsl(60, 100%, 50%);
+  background: currentColor;
+  box-shadow: 0 -1px 8px;
+  opacity: 0;
+}
+
+#instantclick.visible {
+  opacity: 1;
+  animation: instantclick 1s ease-in infinite;
+}
+
+@keyframes instantclick {
+  0%,
+  5% {
+    transform: translateX(-100%);
+  }
+  45%,
+  55% {
+    transform: translateX(0%);
+  }
+  95%,
+  100% {
+    transform: translateX(100%);
+  }
 }

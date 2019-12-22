@@ -7,4 +7,4 @@ section.card.error.bg-danger
       == error.message.to_s + "\n"
       = error.backtrace.reject{ |name| name.include?('/vendor/') }.join("\n")
 
-== render 'debug'
+== render 'part/debug'

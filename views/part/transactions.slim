@@ -1,0 +1,43 @@
+section.card.transactions
+  .card-body
+    h5.card-title Transactions
+    h6.card-subtitle.text-muted total #{@transactions.total}
+
+    - if @transactions.total_pages > 1
+      .mt-2== render 'part/paginate', :locals => { :paginator => @transactions }
+
+    table.table.table-borderless.table-sm.w-auto
+      thead
+        tr
+          th Hash
+          th Value, SEM
+          th Type
+          th From
+          th To
+          th Time
+
+      tbody
+        - @transactions.each_on_page do |transaction|
+          - if transaction.type == 'CALL' && transaction.transactions_result && transaction.transactions_result.code == 'SUCCESS'
+            - Array(transaction.transactions_result.internalTransactions).each do |transaction|
+              tr
+                td
+                == sem_td(transaction.value)
+                td== '<sub>↱</sub> ' + transaction_type_badge(transaction)
+                td== address_link(transaction.from, shorten: true)
+                td== address_link(transaction.to, shorten: true)
+
+          tr
+            td== transaction_link(transaction[:hash], shorten: true)
+            == sem_td(transaction.value)
+            td
+              - if transaction.type == 'COINBASE'
+                a href="/block/#{transaction.block_number}" == transaction_type_badge(transaction)
+              - else
+                == transaction_type_badge(transaction)
+            td== address_link(transaction.from_addr, shorten: true)
+            td== address_link(transaction.to_addr, shorten: true)
+            td.text-muted== timestamp_time(transaction.timestamp, local: true)
+
+    - if @transactions.total_pages > 1
+      .mt-2== render 'part/paginate', :locals => { :paginator => @transactions }

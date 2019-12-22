@@ -5,45 +5,35 @@ require 'json'
 require 'awesome_print'
 require 'ostruct'
 require 'digest/sha1'
+require 'cache'
 
 module SemuxExplorerAPI
   class BackendError < StandardError; def backtrace; []; end; end
+  class InvalidCredentials < StandardError; def backtrace; []; end; end
+  class InvalidAddress < StandardError; def backtrace; []; end; end
 
-  module Methods
-    def address_names
-      $address_names
-    end
-
-    def address_name(address, renew: false)
-      if renew || $address_names.nil? || $address_names.empty?
-        delegates_get
-      end
-      $address_names[address.to_s]
-    end
-
-    def name_address(name, renew: false)
-      if renew || $address_names.nil? || $address_names.empty?
-        delegates_get
-      end
-      $address_names.invert[name.to_s]
-    end
-
+  module MethodsV2
     def delegates_get
-      delegates = request("semux.blockchain.delegates.get", {})
-      $address_names = Hash[delegates.map{ |delegate| [delegate.addr, delegate.name] }]
+      delegates = request("semux.blockchain.delegates.get", nil)
+      save_address_names(delegates)
       delegates
     end
 
-    def address_get(addr)
-      if addr.match /0x[\da-fA-F]{40}/
-        Array(request("semux.blockchain.address.get", [addr]))[0]
-      else
-        nil
-      end
+    def address_get(address_hash)
+      fail InvalidAddress unless address_hash.match /^0x[\da-fA-F]{40}$/
+      Array(request("semux.blockchain.address.get", [address_hash]))[0]
     end
 
     def block_get(block_id, page: 0)
       request("semux.blockchain.block.get_by_id", block_id)
+    end
+
+    def block_get_last
+      request("semux.blockchain.block.get_last", nil)
+    end
+
+    def transaction_get(transaction_hash)
+      request("semux.blockchain.transactions.get_by_id", transaction_hash)
     end
 
     def block_transactions(block_id, offset: nil, limit: nil)
@@ -54,25 +44,53 @@ module SemuxExplorerAPI
       request("semux.blockchain.transactions.get_by_block_id", :block_id => block_id, :limit => limit, :offset => offset)
     end
 
-    def address_transactions(address, offset: nil, limit: nil)
+    def address_transactions(address_hash, offset: nil, limit: nil)
       offset = offset.to_i
       offset = 0 if offset < 0
       limit = limit.to_i
       limit = 20 if limit <= 0 || limit > 100
-      request("semux.blockchain.transactions.get_by_address", :address => address, :limit => limit, :offset => offset)
+      request("semux.blockchain.transactions.get_by_address", :address => address_hash, :limit => limit, :offset => offset)
     end
   end
 
   module API
-    include Methods
+    include MethodsV2
     extend self
 
-    attr_reader :user, :session_id, :last_request_time
+    attr_reader :backend_times
 
-    @debug_output = $stdout if ENV['RACK_ENV'] == 'development'
-    @base_uri = ENV['BACKEND_BASE']
+    def init
+      @cache ||= Cache.new
+      @last_block = nil
+      @backend_times = {}
+      @address_names ||= {}
+      @debug_output = $stdout if ENV['RACK_ENV'] == 'development'
+      @base_uri = ENV['BACKEND_BASE']
+    end
+
+    def address_name(address, renew: false)
+      delegates_get if @address_names.empty?
+      @address_names[address.to_s]
+    end
+
+    def name_address(name, renew: false)
+      delegates_get if @address_names.empty?
+      @address_names.key(name.to_s)
+    end
+
+    def last_block
+      @last_block ||= block_get_last
+    end
+
+    def backend_time
+      backend_times.inject(0.0) { |all, time| all + time[1] }
+    end
 
     private
+
+    def save_address_names(delegates)
+      @address_names = Hash[delegates.map{ |delegate| [delegate.addr, delegate.name] }]
+    end
 
     def http
       @http ||= begin
@@ -83,75 +101,78 @@ module SemuxExplorerAPI
       end
     end
 
-    def post(pathname='', body: {})
-      uri = URI.parse(@base_uri + pathname)
+    def post(body)
+      uri = URI.parse(@base_uri)
       request = Net::HTTP::Post.new(uri.request_uri, 'Content-Type' => 'application/json')
       request.body = body.to_json
+
+      @backend_times ||= {}
+      start = Process.clock_gettime(Process::CLOCK_MONOTONIC)
       response = http.request(request)
+      @backend_times[body[:method]] = Process.clock_gettime(Process::CLOCK_MONOTONIC) - start
+
       response.body
     end
 
-    def auth
-      credentials = JSON.parse File.read('config/credentials.json')
-      data = request("base.user.auth.new_session", credentials, cache: false)
-
-      @session_id = data["sid"]
-      @user = data["user"]
-
-      data
-    end
-
-    MAX_RETRY_COUNT = 2
-
-    def request(name, data, cache: true)
-      fail if @retry_count.to_i > MAX_RETRY_COUNT
-
-      body = { :data => data, :method => name, :ts => Time.now.to_i }
-      body["sid"] = @session_id if @session_id
-
-      start = Process.clock_gettime(Process::CLOCK_MONOTONIC)
-      if ENV['RACK_ENV'] == 'development' || !cache
-        response_body = post(body: body)
-        @last_request_time = Process.clock_gettime(Process::CLOCK_MONOTONIC) - start
+    def cached_post(body, key)
+      if false && ENV['RACK_ENV'] == 'development'
+        post(body)
       else
-        $cache ||= {}
-        response_body = begin
-          hash = Digest::SHA1.hexdigest([name, data].to_json)
-          stored_data = $cache[hash]
-          if stored_data && (start - stored_data[0] < ENV['CACHE_TIMEOUT'].to_i)
-            @last_request_time = nil
-            stored_data[1]
-          else
-            post_response = post(body: body)
-            finish = Process.clock_gettime(Process::CLOCK_MONOTONIC)
-            @last_request_time = finish - start
-            $cache[hash] = [finish, post_response]
-            post_response
-          end
+        key_hash = Digest::SHA1.hexdigest(key.to_json)
+        if data = @cache.get(key_hash)
+          data
+        else
+          @cache.set(key_hash, post(body))
         end
       end
+    end
 
-      response = JSON.parse(response_body, :object_class => OpenStruct)
+    def auth
+      body = {
+        :method => "base.user.auth.new_session",
+        :data => JSON.parse(File.read('config/credentials.json')),
+        :ts => Time.now.to_i,
+      }
 
-      case response["result"]["res"]
+      response_body = post(body)
+      response = JSON.parse(response_body, object_class: OpenStruct)
+
+      case response.result["res"]
       when "SUCCESS"
-        @retry_count = 0
-        response["data"]
+        @session_id = response.data["sid"]
+      else
+        fail InvalidCredentials, { :method => name, :response => response }.ai
+      end
+    rescue JSON::ParserError => e
+      fail BackendError, { :error => "#{e}: #{e.message}", :method => name, :response => response }.ai
+    end
+
+    def request(method, data)
+      body = { 
+        :method => method,
+        :data => data,
+        :ts => Time.now.to_i,
+        :sid => @session_id || auth,
+      }
+
+      response_body = cached_post(body, [method, data])
+      response = JSON.parse(response_body, object_class: OpenStruct)
+
+      case response.result["res"]
+      when "SUCCESS"
+        response.data
       when "INVALID_SID"
-        $cache.delete(hash) if $cache
-        @session_id = nil
+        @cache.delete(hash)
         auth
-        @retry_count ||= 0
-        @retry_count += 1
         request(name, data)
       when "BLOCK_NOT_FOUND", "ADDRESS_NOT_FOUND", "TRANSACTION_NOT_FOUND"
         nil
       else
-        $cache.delete(hash) if $cache
+        @cache.delete(hash)
         fail BackendError, { :method => name, :params => data, :response => response }.ai
       end
     rescue JSON::ParserError => e
-      $cache.delete(hash) if $cache
+      @cache.delete(hash)
       fail BackendError, { :error => "#{e}: #{e.message}", :method => name, :params => data, :response => response }.ai
     end
   end

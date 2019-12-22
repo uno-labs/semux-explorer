@@ -1,0 +1,10 @@
+== render 'part/nav'
+
+== render 'block/information'
+
+== render 'block/nav'
+
+- if @transactions.any_on_page?
+  == render 'part/transactions'
+
+== render 'part/debug'

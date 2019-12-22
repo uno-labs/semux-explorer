@@ -1,0 +1,11 @@
+== render 'part/nav'
+
+== render 'address/information'
+
+- unless @address.votes_dist.to_h.empty?
+  == render 'address/votes'
+
+- if @transactions.any_on_page?
+  == render 'part/transactions'
+
+== render 'part/debug'

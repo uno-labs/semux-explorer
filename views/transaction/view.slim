@@ -1,0 +1,8 @@
+== render 'part/nav'
+
+== render 'transaction/information'
+
+- if @transaction.transactions_result
+  == render 'transaction/internal_transactions'
+
+== render 'part/debug'

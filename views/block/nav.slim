@@ -1,0 +1,8 @@
+﻿nav.blocks.card-body.bg-dark
+  - latest_block = API.last_block.id
+  - if @block.id > 0
+    a.btn.btn-sm.btn-success.mr-2 href="/block/#{@block.id - 1}" Previous block/#{@block.id - 1}
+  - if @block.id < latest_block - 1
+    a.btn.btn-sm.btn-success.mr-2 href="/block/#{@block.id + 1}" Next block/#{@block.id + 1}
+  - if @block.id < latest_block
+    a.btn.btn-sm.btn-success href="/block/#{latest_block}" Last block/#{latest_block}

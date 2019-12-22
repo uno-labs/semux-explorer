@@ -1,0 +1,25 @@
+- if @transaction.transactions_result.internalTransactions && !@transaction.transactions_result.internalTransactions.empty?
+  section.card.internal-transactions
+    .card-body
+      h6 Internal transactions
+      table.table.table-borderless.table-sm.w-auto
+        thead
+          tr
+            th
+            th Value, SEM
+            th Type
+            th From
+            th To
+            th
+              / Gas
+
+        tbody
+          - @transaction.transactions_result.internalTransactions.each do |transaction|
+            tr
+              td
+              == sem_td(transaction.value)
+              td== '<sub>↱</sub> ' + transaction_type_badge(transaction)
+              td== address_link(transaction.from, shorten: true)
+              td== address_link(transaction.to, shorten: true)
+              td
+                /= transaction.gas

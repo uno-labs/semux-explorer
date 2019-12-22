@@ -1,0 +1,55 @@
+﻿section.card.information.transaction-information
+  .card-body
+    h5 Transaction information
+    dl.dl-horizontal
+      dt> Hash
+      dd>
+        == @transaction[:hash]
+        = ' '
+        == external_link :'semux.info', :transaction, @transaction[:hash]
+
+      dt> Block number
+      dd>
+        == block_link(@transaction.block_number)
+        = ' '
+        == external_link :'semux.info', :block, @transaction.block_number
+
+      dt> Timestamp
+      dd>== timestamp_time(@transaction.timestamp)
+
+      dt> Local time
+      dd>== timestamp_time(@transaction.timestamp, local: true)
+
+      dt> From
+      dd>== address_link(@transaction.from_addr, hex: true)
+
+      dt> To
+      dd>== address_link(@transaction.to_addr, hex: true)
+
+      dt> Value, SEM
+      dd>== sem_span @transaction.value
+
+      dt> Fee, SEM
+      dd>== sem_span @transaction.fee
+
+      - if @transaction.transactions_result
+        dt> Gas fee, SEM
+        dd>== sem_span(@transaction.transactions_result.gasUsed * @transaction.gas_price)
+
+        dt> Gas price, SEM
+        dd>== sem_span @transaction.gas_price
+
+        dt> Gas used / Gas limit
+        dd>== "#{@transaction.transactions_result.gasUsed} / #{@transaction.transactions_result.gas}"
+
+      dt> Type
+      dd>
+        - if @transaction.type == 'COINBASE'
+          a href="/block/#{@transaction.block_number}" == transaction_type_badge(@transaction)
+        - else
+          == transaction_type_badge(@transaction)
+
+      dt> Nonce
+      dd>== @transaction.nonce
+
+      == render 'part/data', :locals => { :data => @transaction.data }

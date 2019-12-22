@@ -1,0 +1,26 @@
+﻿section.card.information.block-information
+  .card-body
+    h5 Block information
+    dl.dl-horizontal
+      dt> Block number
+      dd>
+        = @block.id
+        = ' '
+        == external_link :'semux.info', :block, @block.id
+
+      dt> Hash
+      dd>== @block[:hash]
+
+      dt> Forger
+      dd.address>== address_link(@block.forged_by_addr_hash, hex: true)
+
+      dt> Timestamp
+      dd>== timestamp_time(@block.timestamp)
+
+      dt> Local time
+      dd>== timestamp_time(@block.timestamp, local: true)
+
+      dt> Transaction count
+      dd>== @block.transactions_count
+
+      == render 'part/data', :locals => { :data => @block.data }

@@ -6,7 +6,7 @@
   == render 'delegate/information'
   == render 'delegate/votes'
 
-- if @transactions && !@transactions.empty?
-  == render 'transactions'
+- if @transactions.any_on_page?
+  == render 'part/transactions'
 
-== render 'debug'
+== render 'part/debug'

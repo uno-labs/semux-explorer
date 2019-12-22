@@ -1,14 +1,12 @@
 h1.d-none#title = page_title
 
-nav.navbar.navbar-expand-lg.navbar-dark.bg-secondary.main-nav
-  a.navbar-brand href="/" = site_title
+nav.navbar.navbar-expand-lg.navbar-dark.bg-secondary.main-nav.card-body.py-3
+  a.navbar-brand.mr-auto href="/"
+    img src="/img/semux-logo.png" alt="Semux logo"
+    = site_title
 
-  - if chapters.any?
-    button.navbar-toggler type="button" data-toggle="collapse" data-target="#navbarMainLinks" aria-controls="navbarMainLinks" aria-expanded="false" aria-label="Toggle navigation"
-      span.navbar-toggler-icon
-
-  .collapse.navbar-collapse#navbarMainLinks
-    ul.navbar-nav
-      - chapters.each do |chapter|
-        li.nav-item class=(active_chapter == chapter ? 'active' : nil)
-          a.nav-link href="/#{chapter}" = chapter
+  .text-right
+    small.text-muted Last block
+    br
+    | #{API.last_block.id} @ 
+    == timestamp_time(API.last_block.timestamp, local: true)

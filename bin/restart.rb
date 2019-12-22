@@ -96,5 +96,5 @@ while true
 	
 	# re-check in
 	# two seconds
-	sleep 2
+	sleep 1
 end

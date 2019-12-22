@@ -7,7 +7,7 @@ GEM
       nio4r (~> 2.0)
     rack (2.0.8)
     rake (13.0.1)
-    roda (3.26.0)
+    roda (3.27.0)
       rack
     slim (4.0.1)
       temple (>= 0.7.6, < 0.9)

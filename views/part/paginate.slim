@@ -1,36 +1,26 @@
-ruby:
-  @count = instance_variable_get "@#{@pagination_object}_count"
-  @limit = instance_variable_get "@#{@pagination_object}_limit"
-  @offset = instance_variable_get "@#{@pagination_object}_offset"
-  pages = (@count.to_f / @limit).ceil
-  offsets = {}
-  pages.times do |index|
-    offsets[index] = @limit * index
-  end
+- pagination_width = 5
+- more_indicator = '· ·'
 
 nav.pagination
   ul.pagination
-    - offsets.each do |index, offset|
-      - active = (offset == @offset) ? 'active' : nil
+    - paginator.each_page do |page|
+      - active = (page == paginator.page) ? 'active' : nil
       - insert = more = false
-      - page = offset / @limit + 1
-      - @pages_count = pages
-      - @current_page = @offset / @limit + 1
       - if active
         - insert = true
-      - elsif page == 1 || page == @pages_count
+      - elsif page == 1 || page == paginator.total_pages
         - insert = true
-      - elsif page == @current_page - 1 || page == @current_page + 1
+      - elsif page >= paginator.page - pagination_width / 2 && page <= paginator.page + pagination_width / 2
         - insert = true
-      - elsif page <= 3 + 2 && @current_page - 1 <= 3
+      - elsif page <= pagination_width && paginator.page <= pagination_width
         - insert = true
-      - elsif page >= @pages_count + 1 - 3 - 2 && @current_page + 1 >= @pages_count - 3 + 1
+      - elsif page >= paginator.total_pages - pagination_width && paginator.page >= paginator.total_pages - pagination_width
         - insert = true
-      - elsif page == 1 + 1 || page == @pages_count - 1
+      - elsif page == 2 || page == paginator.total_pages - 1
         - more = true
       - if insert
         li.page-item class=active
-          a.page-link href="?#{@pagination_object}_offset=#{offset}" = index+1
+          a.page-link href=(paginator.total_pages == page ? "?" : "?page=#{page}") = page
       - if more
         li.page-item.disabled
-          span.page-link= '· ·'
+          span.page-link= more_indicator
