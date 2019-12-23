@@ -164,7 +164,7 @@ module SemuxExplorerAPI
       when "INVALID_SID"
         @cache.delete(hash)
         auth
-        request(name, data)
+        request(method, data)
       when "BLOCK_NOT_FOUND", "ADDRESS_NOT_FOUND", "TRANSACTION_NOT_FOUND"
         nil
       else
