@@ -127,10 +127,20 @@ module SemuxExplorerAPI
       end
     end
 
+    CREDENTIALS_FILE = 'config/credentials.json'
+
+    def credentials
+      JSON.parse(File.read CREDENTIALS_FILE)
+    rescue Errno::ENOENT => e
+      fail InvalidCredentials, { :error => 'credentials not found' }.ai
+    rescue JSON::ParserError => e
+      fail InvalidCredentials, { :error => 'error parsing credentials' }.ai
+    end
+
     def auth
       body = {
         :method => "base.user.auth.new_session",
-        :data => JSON.parse(File.read('config/credentials.json')),
+        :data => credentials,
         :ts => Time.now.to_i,
       }
 
