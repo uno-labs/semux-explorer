@@ -141,10 +141,10 @@ module SemuxExplorerAPI
       when "SUCCESS"
         @session_id = response.data["sid"]
       else
-        fail InvalidCredentials, { :method => name, :response => response }.ai
+        fail InvalidCredentials, { :method => body[:method], :response => response }.ai
       end
     rescue JSON::ParserError => e
-      fail BackendError, { :error => "#{e}: #{e.message}", :method => name, :response => response }.ai
+      fail BackendError, { :error => "#{e}: #{e.message}", :method => body[:method], :response => response }.ai
     end
 
     def request(method, data)
@@ -169,11 +169,11 @@ module SemuxExplorerAPI
         nil
       else
         @cache.delete(hash)
-        fail BackendError, { :method => name, :params => data, :response => response }.ai
+        fail BackendError, { :method => method, :params => data, :response => response }.ai
       end
     rescue JSON::ParserError => e
       @cache.delete(hash)
-      fail BackendError, { :error => "#{e}: #{e.message}", :method => name, :params => data, :response => response }.ai
+      fail BackendError, { :error => "#{e}: #{e.message}", :method => method, :params => data, :response => response }.ai
     end
   end
 end
