@@ -114,11 +114,10 @@ module SemuxExplorerAPI
       response.body
     end
 
-    def cached_post(body, key)
+    def cached_post(body, key_hash)
       if false && ENV['RACK_ENV'] == 'development'
         post(body)
       else
-        key_hash = Digest::SHA1.hexdigest(key.to_json)
         if data = @cache.get(key_hash)
           data
         else
@@ -158,6 +157,7 @@ module SemuxExplorerAPI
     end
 
     def request(method, data)
+      key_hash = Digest::SHA1.hexdigest([method, data].to_json)
       body = { 
         :method => method,
         :data => data,
@@ -165,24 +165,24 @@ module SemuxExplorerAPI
         :sid => @session_id || auth,
       }
 
-      response_body = cached_post(body, [method, data])
+      response_body = cached_post(body, key_hash)
       response = JSON.parse(response_body, object_class: OpenStruct)
 
       case response.result["res"]
       when "SUCCESS"
         response.data
       when "INVALID_SID"
-        @cache.delete(hash)
+        @cache.delete(key_hash)
         auth
         request(method, data)
       when "BLOCK_NOT_FOUND", "ADDRESS_NOT_FOUND", "TRANSACTION_NOT_FOUND"
         nil
       else
-        @cache.delete(hash)
+        @cache.delete(key_hash)
         fail BackendError, { :method => method, :params => data, :response => response }.ai
       end
     rescue JSON::ParserError => e
-      @cache.delete(hash)
+      @cache.delete(key_hash)
       fail BackendError, { :error => "#{e}: #{e.message}", :method => method, :params => data, :response => response }.ai
     end
   end
