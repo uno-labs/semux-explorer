@@ -8,5 +8,6 @@ nav.navbar.navbar-expand-lg.navbar-dark.bg-secondary.main-nav.card-body.py-3
   .text-right
     small.text-muted Last block
     br
-    | #{API.last_block.id} @ 
+    == block_link API.last_block.id, label: API.last_block.id.to_s
+    |  @ 
     == timestamp_time(API.last_block.timestamp, local: true)
