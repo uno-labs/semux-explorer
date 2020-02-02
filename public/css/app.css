@@ -37,6 +37,7 @@
   }
   .votes table td { padding-top: 0; padding-bottom: 0; margin-bottom: 0 }
   .delegates-list table td:last-child, .delegates-list table th:last-child { display: none; }
+  .votes-for-delegate td.percent-bar { display: none; }
 }
 
 @media (max-width: 899px) {
@@ -155,4 +156,10 @@ td:last-child, th:last-child {
   100% {
     transform: translateX(100%);
   }
+}
+.votes-for-delegate td.text-muted {
+  text-align: right;
+}
+.votes-for-delegate td.percent-bar {
+  vertical-align: middle;
 }
