@@ -11,3 +11,6 @@ section.card.information.delegate-information
       - if @address.delegate_state.blocks_forged_miss.to_i > 0
         dt> Missed blocks
         dd>= @address.delegate_state.blocks_forged_miss
+
+      dt> Total votes
+      dd>== sem_span @address.delegate_state.votes_sum
