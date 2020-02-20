@@ -12,7 +12,7 @@ section.card.delegates-list
         th Name
         th Status
         th Votes
-        th.pl-2 Forged
+        th.pl-2 Ping
         th Address
       - @delegates.each do |delegate|
         - @rank += 1
@@ -21,7 +21,7 @@ section.card.delegates-list
           td== address_link(delegate.addr)
           td== delegate_state_badge(delegate.state)
           == sem_td(delegate.delegate_state ? delegate.delegate_state.votes_sum : 0)
-          td.text-muted.text-right== delegate.delegate_state && delegate.delegate_state.blocks_forged_hit
+          td.text-muted.text-right== delegate_state_badge(delegate.alive_state)
           td== address_link(delegate.addr, name: false, hex: true)
 
 == render 'part/debug'

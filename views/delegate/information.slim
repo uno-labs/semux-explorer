@@ -14,3 +14,26 @@ section.card.information.delegate-information
 
       dt> Total votes
       dd>== sem_span @address.delegate_state.votes_sum
+
+      - if @address.alive_state
+        dt> Ping
+        dd>== delegate_state_badge(@address.alive_state)
+
+      dt> Uptime
+      dd> #{@address.uptime_percent}%
+
+      dt> Registration date
+      dd>== timestamp_time(@address.delegate_ts)
+
+      dt> Registration date (local time)
+      dd>== timestamp_time(@address.delegate_ts, local: true)
+
+      dt> Registration block
+      dd>
+        == block_link(@address.delegate_block_id)
+        - if @address.delegate_block_id != -1
+          = ' '
+          == external_link :'semux.info', :block, @address.delegate_block_id
+
+      dt> Position in delegate list
+      dd> #{@address.delegate_pos}/100

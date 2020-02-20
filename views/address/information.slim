@@ -15,6 +15,16 @@ section.card.information.address-information
           = ' '
           == address_link(@address.addr, hex: false)
 
+      - if @address.tags && !@address.tags.empty?
+        dt> Tags
+        dd>
+          = @address.tags.map(&:to_s).join(', ')
+
+      - if @address.label && !@address.label.empty?
+        dt> Label
+        dd>
+          = @address.label
+
       dt> Total balance
       dd>== sem_span @address.total_balance
 
@@ -36,3 +46,28 @@ section.card.information.address-information
         == "#{@address.transactions_count} "
         = ' '
         == external_link :'semux.info', :address_transactions, @address.addr
+
+    - if @address.history_max_balance
+      h5.card-title Address history
+      dl.dl-horizontal
+        dt> Max historic balance
+        dd>== sem_span @address.history_max_balance
+
+        dt> Total received
+        dd>== sem_span @address.total_in_sum
+
+        dt> Total sent
+        dd>== sem_span @address.total_out_sum
+
+        dt> Last activity
+        dd>== timestamp_time(@address.last_active_ts)
+
+        dt> Last activity (local time)
+        dd>== timestamp_time(@address.last_active_ts, local: true)
+
+        dt> Last activity block
+        dd>
+          == block_link(@address.last_active_block_id)
+          - if @address.last_active_block_id != -1
+            = ' '
+            == external_link :'semux.info', :block, @address.last_active_block_id

@@ -122,6 +122,9 @@ module Helpers
     'DELEGATE' => 'warning',
     'VALIDATOR' => 'success',
     'SMART_CONTRACT' => 'info',
+    'ALIVE' => 'success',
+    'DANGER' => 'warning',
+    'DEAD' => 'error',
   }
 
   def delegate_state_badge(state)
