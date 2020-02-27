@@ -41,7 +41,7 @@ module SemuxExplorerAPI
       offset = 0 if offset < 0
       limit = limit.to_i
       limit = 200 if limit <= 0 || limit > 1000
-      request("semux.blockchain.transactions.get_by_block_id", :block_id => block_id, :limit => limit, :offset => offset)
+      request("semux.blockchain.transactions.get_by_block_id", :block_id => block_id, :limit => limit, :offset => offset) || []
     end
 
     def address_transactions(address_hash, offset: nil, limit: nil)
@@ -49,7 +49,7 @@ module SemuxExplorerAPI
       offset = 0 if offset < 0
       limit = limit.to_i
       limit = 20 if limit <= 0 || limit > 100
-      request("semux.blockchain.transactions.get_by_address", :address => address_hash, :limit => limit, :offset => offset)
+      request("semux.blockchain.transactions.get_by_address", :address => address_hash, :limit => limit, :offset => offset) || []
     end
   end
 
