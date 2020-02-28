@@ -21,7 +21,9 @@ section.card.delegates-list
           td== address_link(delegate.addr)
           td== delegate_state_badge(delegate.state)
           == sem_td(delegate.delegate_state ? delegate.delegate_state.votes_sum : 0)
-          td.text-muted.text-right== delegate_state_badge(delegate.alive_state)
+          td.text-muted.text-right
+            - if delegate.alive_state && delegate.alive_state != 'NOT_SET'
+              == delegate_state_badge(delegate.alive_state)
           td== address_link(delegate.addr, name: false, hex: true)
 
 == render 'part/debug'

@@ -8,14 +8,13 @@ section.card.information.delegate-information
       dt> Forged blocks
       dd>= @address.delegate_state.blocks_forged_hit
 
-      - if @address.delegate_state.blocks_forged_miss.to_i > 0
-        dt> Missed blocks
-        dd>= @address.delegate_state.blocks_forged_miss
+      dt> Missed blocks
+      dd>= @address.missed_blocks
 
       dt> Total votes
       dd>== sem_span @address.delegate_state.votes_sum
 
-      - if @address.alive_state
+      - if @address.alive_state && @address.alive_state != 'NOT_SET'
         dt> Ping
         dd>== delegate_state_badge(@address.alive_state)
 
