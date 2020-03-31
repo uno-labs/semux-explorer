@@ -5,19 +5,19 @@ section.card.delegates-list
     h5.card-title Delegates
     h6.card-subtitle.text-muted total #{@delegates.count}
 
-    table.table.table-borderless.table-sm.w-auto
-      - @rank = 0
+    table.table.table-borderless.table-sm.w-auto#delegates
       tr
         th Rank
+        th ♥
         th Name
         th Status
         th Votes
         th.pl-2 Ping
         th Address
       - @delegates.each do |delegate|
-        - @rank += 1
         tr
-          td== @rank
+          td.text-center== delegate.delegate_pos
+          td ♥
           td== address_link(delegate.addr)
           td== delegate_state_badge(delegate.state)
           == sem_td(delegate.delegate_state ? delegate.delegate_state.votes_sum : 0)

@@ -163,3 +163,23 @@ td:last-child, th:last-child {
 .votes-for-delegate td.percent-bar {
   vertical-align: middle;
 }
+
+table#delegates td:nth-child(1) {
+  cursor: pointer;
+}
+table#delegates td:nth-child(2) {
+  color: transparent;
+  cursor: pointer;
+}
+table#delegates tr:hover td:nth-child(2) {
+  color: #aaa;
+}
+table#delegates .favorite td:nth-child(2) {
+  color: #fff !important;
+}
+table#delegates .favorite td:nth-child(3) a {
+  text-decoration: underline;
+  font-size: 120%;
+  line-height: 100%;
+  letter-spacing: -1px;
+}
