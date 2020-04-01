@@ -24,8 +24,8 @@ module Helpers
     [site_title, @path_parts].flatten.compact.join(' :: ')
   end
 
-  def int_as_sem(number)
-    sprintf('%.9f', number.to_f / 10**9).sub(/(\.\d*?)0+$/, '\1').chomp('.')
+  def int_as_sem(number, decimals: 9)
+    sprintf("%.#{decimals}f", number.to_f / 10**9).sub(/(\.\d*?)0+$/, '\1').chomp('.')
   end
 
   def timestamp_time(unix_ms, local: false)
@@ -34,18 +34,17 @@ module Helpers
     "<time class=\"#{klass}\" datetime=\"#{iso8601}\">#{iso8601[0..18].tr('T',' ')}</time>"
   end
                     
-  MAX_DECIMAL = 9
-
-  def decimal_align_class(string)
+  def decimal_align_class(string, decimals: 9)
+    decimals = 9 if decimals > 9
     decimal_count = string.partition('.').last.length
-    decimal_count = MAX_DECIMAL if decimal_count > MAX_DECIMAL
+    decimal_count = decimals if decimal_count > decimals
     decimal_count = -1 if decimal_count == 0
-    "align-#{MAX_DECIMAL - decimal_count}"
+    "align-#{decimals - decimal_count}"
   end
 
-  def sem_td(nsem)
-    sem = int_as_sem(nsem)
-    "<td class=\"text-right text-monospace #{decimal_align_class(sem)}\">#{sem}</td>"
+  def sem_td(nsem, decimals: 9)
+    sem = int_as_sem(nsem, decimals: decimals)
+    "<td class=\"text-right text-monospace #{decimal_align_class(sem, decimals: decimals)}\">#{sem}</td>"
   end
 
   def sem_span(nsem)
