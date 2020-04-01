@@ -126,9 +126,9 @@ module Helpers
     'DEAD' => 'danger',
   }
 
-  def delegate_state_badge(state)
+  def delegate_state_badge(state, label:nil)
     style = DELEGATE_STYLE_MAP[state] || 'dark'
-    "<span class=\"badge badge-pill badge-#{style}\">#{state.downcase}</span>"
+    "<span class=\"badge badge-pill badge-#{style}\">#{label || state.downcase}</span>"
   end
 
   TRANSACTION_STYLE_MAP = {
