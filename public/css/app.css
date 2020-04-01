@@ -164,7 +164,7 @@ td:last-child, th:last-child {
   vertical-align: middle;
 }
 
-table#delegates td:nth-child(1) {
+table#delegates td:nth-child(1), #sort-favorites, table#delegates th:nth-child(1) {
   cursor: pointer;
 }
 table#delegates td:nth-child(2) {

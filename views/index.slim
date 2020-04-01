@@ -2,17 +2,25 @@
 
 section.card.delegates-list
   .card-body
-    h5.card-title Delegates
-    h6.card-subtitle.text-muted total #{@delegates.count}
+    .d-flex
+      .mr-auto
+        h5.card-title Delegates
+        h6.card-subtitle.text-muted total #{@delegates.count}
+      form.form-inline
+        .form-group
+          .input-group
+            input.form-control.form-control-sm#search-delegate name="delegate" type="text" placeholder="Search"
+            .input-group-append
+              button.btn.btn-secondary.btn-lg.py-0.px-2.text-white type="reset" ✕
 
     table.table.table-borderless.table-sm.w-auto#delegates
       tr
         th Rank
-        th ♥
+        th#sort-favorites ▼
         th Name
         th Status
         th Votes
-        th.pl-2 Ping
+        th.text-right.pr-2 Ping
         th Address
       - @delegates.each do |delegate|
         tr
