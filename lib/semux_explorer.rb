@@ -48,7 +48,9 @@ class SemuxExplorer < Roda
 
     r.root do
       @delegates = API.delegates_get
-      @delegates.sort_by!(&:delegate_pos)
+      @delegates.sort_by! do |delegate|
+        "#{(10**19 - (delegate.delegate_state ? delegate.delegate_state.votes_sum : 0)).to_s.rjust(20, '0')} #{delegate.name}"
+      end
       view :index
     end
   end
