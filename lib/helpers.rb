@@ -39,6 +39,7 @@ module Helpers
     decimal_count = string.partition('.').last.length
     decimal_count = decimals if decimal_count > decimals
     decimal_count = -1 if decimal_count == 0
+    decimal_count -= 1 if decimals < 9
     "align-#{decimals - decimal_count}"
   end
 
