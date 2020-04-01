@@ -3,10 +3,10 @@ section.card.votes.votes-for-delegate
     h5.card-title Votes for this delegate
     h6.card-subtitle.text-muted total #{@address.delegate_state.votes_dist.to_h.count}
 
-    table.table.table-borderless.table-sm.w-auto
+    table.table.table-borderless.table-sm.w-auto#delegate-votes
       tr
         th
-        th From Address
+        th From
         th Votes
 
       - total = 0
@@ -18,7 +18,7 @@ section.card.votes.votes-for-delegate
           td== address_link(address)
           == sem_td(sem)
           - percent = (sem.to_f / @address.delegate_state.votes_sum.to_f * 100).round(2)
-          td.text-muted= "#{'%.2f' % percent}%"
+          td.percent-text.text-muted= "#{'%.2f' % percent}%"
           td.percent-bar width="100%"
             - if percent > 0.5
               .progress.bg-transparent

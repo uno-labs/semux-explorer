@@ -164,22 +164,24 @@ td:last-child, th:last-child {
   vertical-align: middle;
 }
 
-table#delegates td:nth-child(1), #sort-favorites, table#delegates th:nth-child(1) {
+table#delegates {
+  min-width: 100%;
+}
+table#delegates td:nth-child(1), table#delegates th:nth-child(1) {
+  user-select: none;
+  color: #888;
+  font-size: 125%;
+  line-height: 105%;
   cursor: pointer;
+  position: relative;
 }
-table#delegates td:nth-child(2) {
-  color: transparent;
-  cursor: pointer;
-}
-table#delegates tr:hover td:nth-child(2) {
-  color: #aaa;
-}
-table#delegates .favorite td:nth-child(2) {
+table#delegates .favorite td:nth-child(1), table#delegates .favorite th:nth-child(1) {
   color: #fff !important;
 }
-table#delegates .favorite td:nth-child(3) a {
-  text-decoration: underline;
-  font-size: 120%;
-  line-height: 100%;
-  letter-spacing: -1px;
+table#delegates .favorite td:nth-child(1):after, table#delegates .favorite th:nth-child(1):after {
+  content: '★';
+  position: absolute;
+  left: 0; right: 0;
+  top: 0; bottom: 0;
+  padding: inherit;
 }

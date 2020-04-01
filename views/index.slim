@@ -15,22 +15,28 @@ section.card.delegates-list
 
     table.table.table-borderless.table-sm.w-auto#delegates
       tr
+        th#sort-favorites ☆
         th Rank
-        th#sort-favorites ▼
         th Name
         th Status
         th Votes
-        th.text-right.pr-2 Ping
+        th Ping
         th Address
+      - @rank = 0
       - @delegates.each do |delegate|
+        - @rank += 1
         tr
-          td.text-center== delegate.delegate_pos
-          td ♥
+          td ☆
+          td.text-center== @rank
           td== address_link(delegate.addr)
           td== delegate_state_badge(delegate.state)
-          == sem_td(delegate.delegate_state ? delegate.delegate_state.votes_sum : 0)
-          td.text-muted.text-right
-            - if delegate.alive_state && delegate.alive_state != 'NOT_SET'
+          == sem_td(delegate.delegate_state ? delegate.delegate_state.votes_sum : 0, decimals: 3)
+          td
+            - case delegate.alive_state
+            - when 'NOT_SET'
+            - when 'WARNING'
+              == delegate_state_badge(delegate.alive_state, label: delegate.uptime_percent.round.to_s + '%')
+            - else
               == delegate_state_badge(delegate.alive_state)
           td== address_link(delegate.addr, name: false, hex: true)
 
