@@ -35,7 +35,7 @@ section.card.delegates-list
             - case delegate.alive_state
             - when 'NOT_SET'
             - when 'WARNING'
-              == delegate_state_badge(delegate.alive_state, label: delegate.uptime_percent.round.to_s + '%')
+              == delegate_state_badge(delegate.alive_state, label: delegate.uptime_percent.to_i.to_s + '%')
             - else
               == delegate_state_badge(delegate.alive_state)
           td== address_link(delegate.addr, name: false, hex: true)
