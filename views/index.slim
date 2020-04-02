@@ -32,11 +32,7 @@ section.card.delegates-list
           td== delegate_state_badge(delegate.state)
           == sem_td(delegate.delegate_state ? delegate.delegate_state.votes_sum : 0, decimals: 3)
           td
-            - case delegate.alive_state
-            - when 'NOT_SET'
-            - when 'WARNING'
-              == delegate_state_badge(delegate.alive_state, label: delegate.uptime_percent.to_i.to_s + '%')
-            - else
+            - unless delegate.alive_state == 'NOT_SET'
               == delegate_state_badge(delegate.alive_state)
           td== address_link(delegate.addr, name: false, hex: true)
 
