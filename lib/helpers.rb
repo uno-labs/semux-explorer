@@ -1,6 +1,26 @@
 module Helpers
   class NotFoundError < StandardError; def backtrace; []; end; end
 
+  TAGS_FILE = 'config/tags.json'
+
+  def tags(reset: false)
+    return @tags if @tags && !@tags.empty? && !reset
+    json = JSON.parse(File.read TAGS_FILE)
+    @tags = {}
+    json.each_pair do |label, data|
+      if data.kind_of? Hash
+        @tags.update(data)
+        json.delete(label)
+      end
+    end
+    @tags.update(json)
+    @tags
+  rescue Errno::ENOENT => e
+    {}
+  rescue JSON::ParserError => e
+    {}
+  end
+
   def show_not_found
     fail NotFoundError.new('404')
   end
@@ -53,11 +73,11 @@ module Helpers
     "<div class=\"align-sem text-right text-monospace #{decimal_align_class(sem)}\">#{sem}</div>"
   end
 
-  def address_link(address, name: true, hex: false, shorten: false)
-    return 'block reward' if address == '0xce6f439a900346a4265b37a1046a625e9fd6d249'
+  def address_link(address, name: true, hex: false, shorten: false, tag: true)
     return 'nil' if address.nil?
     address = address.to_s
     delegate_link = address_link = ''
+
     if name && delegate_name = SemuxExplorer::API.address_name(address)
       if main_resource?(delegate_name: delegate_name)
         delegate_link = "<span class=\"text-warning\">#{delegate_name}</a> "
@@ -67,14 +87,18 @@ module Helpers
     else
       hex = true
     end
+
     if hex
-      label = shorten ? address[0..9] + ':' : address
-      if main_resource?(address: address)
-        address_link = "<span class=\"text-monospace\">#{label}</span>"
+      label = tag && tags[address] || (shorten ? address[0..9] + ':' : address)
+      klass = "text-monospace"
+      klass += " text-info" if tag && tags[address]
+      if label == 'block reward' || main_resource?(address: address)
+        address_link = "<span class=\"#{klass}\">#{label}</span>"
       else
-        address_link = "<a class=\"text-monospace\" href=\"/address/#{address}\">#{label}</a>"
+        address_link = "<a class=\"#{klass}\" href=\"/address/#{address}\">#{label}</a>"
       end
     end
+
     delegate_link + address_link
   end
 

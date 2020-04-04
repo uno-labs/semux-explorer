@@ -4,10 +4,15 @@ section.card.information.address-information
     dl.dl-horizontal
       dt> Address 
       dd.address>
-        == address_link(@address.addr, hex: true, name: false)
+        == address_link(@address.addr, hex: true, name: false, tag: false)
         = ' '
         == external_link :'semux.info', :address, @address.addr
-      
+
+      - if tag = tags[@address.addr]
+        dt> Tag 
+        dd.tag>
+          == address_link(@address.addr, hex: true, name: false, tag: true)
+
       dt> State
       dd>
         == delegate_state_badge(@address.state)
