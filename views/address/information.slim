@@ -4,14 +4,14 @@ section.card.information.address-information
     dl.dl-horizontal
       dt> Address 
       dd.address>
-        == address_link(@address.addr, hex: true, name: false, tag: false)
+        == address_link(@address.addr, hex: true, name: false, label: false)
         = ' '
         == external_link :'semux.info', :address, @address.addr
 
-      - if tag = tags[@address.addr]
-        dt> Tag 
-        dd.tag>
-          == address_link(@address.addr, hex: true, name: false, tag: true)
+      - if label = labels[@address.addr]
+        dt> Label 
+        dd.label>
+          == address_link(@address.addr, hex: true, name: false, label: true)
 
       dt> State
       dd>

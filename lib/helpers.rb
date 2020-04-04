@@ -1,20 +1,20 @@
 module Helpers
   class NotFoundError < StandardError; def backtrace; []; end; end
 
-  TAGS_FILE = 'config/tags.json'
+  LABELS_FILE = 'config/labels.json'
 
-  def tags(reset: false)
-    return @tags if @tags && !@tags.empty? && !reset
-    json = JSON.parse(File.read TAGS_FILE)
-    @tags = {}
+  def labels(reset: false)
+    return @labels if @labels && !@labels.empty? && !reset
+    json = JSON.parse(File.read LABELS_FILE)
+    @labels = {}
     json.each_pair do |label, data|
       if data.kind_of? Hash
-        @tags.update(data)
+        @labels.update(data)
         json.delete(label)
       end
     end
-    @tags.update(json)
-    @tags
+    @labels.update(json)
+    @labels
   rescue Errno::ENOENT => e
     {}
   rescue JSON::ParserError => e
@@ -73,7 +73,7 @@ module Helpers
     "<div class=\"align-sem text-right text-monospace #{decimal_align_class(sem)}\">#{sem}</div>"
   end
 
-  def address_link(address, name: true, hex: false, shorten: false, tag: true)
+  def address_link(address, name: true, hex: false, shorten: false, label: true)
     return 'nil' if address.nil?
     address = address.to_s
     delegate_link = address_link = ''
@@ -89,13 +89,13 @@ module Helpers
     end
 
     if hex
-      label = tag && tags[address] || (shorten ? address[0..9] + ':' : address)
+      text = label && labels[address] || (shorten ? address[0..9] + ':' : address)
       klass = "text-monospace"
-      klass += " text-info" if tag && tags[address]
-      if label == 'block reward' || main_resource?(address: address)
-        address_link = "<span class=\"#{klass}\">#{label}</span>"
+      klass += " text-info" if label && labels[address]
+      if text == 'block reward' || main_resource?(address: address)
+        address_link = "<span class=\"#{klass}\">#{text}</span>"
       else
-        address_link = "<a class=\"#{klass}\" href=\"/address/#{address}\">#{label}</a>"
+        address_link = "<a class=\"#{klass}\" href=\"/address/#{address}\">#{text}</a>"
       end
     end
 
