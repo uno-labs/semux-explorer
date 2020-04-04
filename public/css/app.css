@@ -37,7 +37,7 @@
   }
   .votes table td { padding-top: 0; padding-bottom: 0; margin-bottom: 0 }
   .delegates-list table td:last-child, .delegates-list table th:last-child { display: none; }
-  .votes-for-delegate td.percent-bar, .votes-for-delegate td.percent-text { display: none; }
+  .votes td.percent-bar, .votes td.percent-text { display: none; }
 }
 
 @media (max-width: 899px) {
@@ -157,10 +157,10 @@ td:last-child, th:last-child {
     transform: translateX(100%);
   }
 }
-.votes-for-delegate td.text-muted {
+.votes td.text-muted {
   text-align: right;
 }
-.votes-for-delegate td.percent-bar {
+.votes td.percent-bar {
   vertical-align: middle;
 }
 

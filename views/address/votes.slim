@@ -6,7 +6,7 @@ section.card.votes.votes-by-address
     table.table.table-borderless.table-sm.w-auto
       tr
         th
-        th For Delegate
+        th For Delegate
         th Votes
 
       - total = 0
@@ -18,6 +18,12 @@ section.card.votes.votes-by-address
           td= index + 1
           td== address_link(address)
           == sem_td(sem)
+          - percent = (sem.to_f / @address.vote_balance.to_f * 100).round(2)
+          td.percent-text.text-muted= "#{'%.2f' % percent}%"
+          td.percent-bar width="100%"
+            - if percent > 0.5
+              .progress.bg-transparent
+                .progress-bar role="pregressbar" style="width: #{percent}%" aria-valuenow=percent aria-valuemin=0 aria=valuemax=100
 
       tfoot
         tr
