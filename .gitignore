@@ -3,3 +3,4 @@ config/credentials.json
 .bundle
 vendor
 logs
+Gemfile.lock
