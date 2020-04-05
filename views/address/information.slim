@@ -13,12 +13,13 @@ section.card.information.address-information
         dd.label>
           == address_link(@address.addr, hex: true, name: false, label: true)
 
-      dt> State
-      dd>
-        == delegate_state_badge(@address.state)
-        - if !@address.name.to_s.empty?
-          = ' '
-          == address_link(@address.addr, hex: false)
+      - unless @address.state == 'NOT_DELEGATE'
+        dt> State
+        dd>
+          == delegate_state_badge(@address.state)
+          - if !@address.name.to_s.empty?
+            = ' '
+            == address_link(@address.addr, hex: false)
 
       - if @address.tags && !@address.tags.empty?
         dt> Tags
