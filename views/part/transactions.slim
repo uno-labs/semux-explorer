@@ -19,13 +19,14 @@ section.card.transactions
       tbody
         - @transactions.each_on_page do |transaction|
           - if transaction.type == 'CALL' && transaction.transactions_result && transaction.transactions_result.code == 'SUCCESS'
-            - Array(transaction.transactions_result.internalTransactions).each do |transaction|
+            - Array(transaction.transactions_result.internalTransactions).each do |internal_transaction|
+              - next if @address && internal_transaction.from != @address.addr && internal_transaction.to != @address.addr
               tr
                 td
-                == sem_td(transaction.value)
-                td== '<sub>↱</sub> ' + transaction_type_badge(transaction)
-                td== address_link(transaction.from, shorten: true)
-                td== address_link(transaction.to, shorten: true)
+                == sem_td(internal_transaction.value)
+                td== '<sub>↱</sub> ' + transaction_type_badge(internal_transaction)
+                td== address_link(internal_transaction.from, shorten: true)
+                td== address_link(internal_transaction.to, shorten: true)
 
           tr
             td== transaction_link(transaction[:hash], shorten: true)
