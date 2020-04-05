@@ -5,16 +5,3 @@ aside.card.debug
     .card-body
       - detailed_infos.each do |info|
         == info
-  .card-footer.text-muted
-    .row
-      .col-md
-        small
-          | powered by ruby roda
-      .col-md.text-right
-        small
-          | render time #{"%.9f" % (stop_timer - API.backend_time)}
-          br
-          - if API.backend_time > 0
-            | backend request time #{"%.9f" % API.backend_time}
-          - else
-            | backend request cached

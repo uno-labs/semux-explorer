@@ -26,7 +26,6 @@ module Helpers
   end
 
   def details(var_name)
-    return nil unless ENV['RACK_ENV'] == 'development'
     if var_value = instance_variable_get("@#{var_name}")
       "<details><summary>debug on <code>#{var_name}</code></summary>#{var_value.ai(:html => true)}</details>"
     end

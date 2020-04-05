@@ -1,0 +1,23 @@
+﻿- if ENV['RACK_ENV'] == 'development'
+  == render 'part/debug'
+
+footer
+  .card-footer.text-muted
+    .row
+      .col-md
+        small
+          | to support 
+          a href='https://semux.top/' semux.top
+          |  vote for 
+          a href='/delegate/ananke' ananke
+          br
+          | powered by ruby roda
+
+      .col-md.text-right
+        small
+          | render time #{"%.9f" % (stop_timer - API.backend_time)}
+          br
+          - if API.backend_time > 0
+            | backend request time #{"%.9f" % API.backend_time}
+          - else
+            | backend request cached

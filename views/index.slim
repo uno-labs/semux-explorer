@@ -1,4 +1,4 @@
-== render 'part/nav'
+== render 'part/header'
 
 section.card.delegates-list
   .card-body
@@ -36,4 +36,4 @@ section.card.delegates-list
               == delegate_state_badge(delegate.alive_state)
           td== address_link(delegate.addr, name: false, hex: true)
 
-== render 'part/debug'
+== render 'part/footer'
