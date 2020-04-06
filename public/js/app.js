@@ -1,4 +1,4 @@
-﻿window.prepare = function(body) {
+window.prepare = function(body) {
   window.translate_dates(body);
 
   var delegates_table = body.querySelector('table#delegates');
