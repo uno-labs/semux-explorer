@@ -45,6 +45,7 @@ window.refresh_fragment = function(fragment) {
       var parent = element.parentNode;
       element.outerHTML = xhr.responseText;
       window.add_refresh_timer(parent.lastChild);
+      window.translate_dates(parent.lastChild);
     }else{
       clearTimeout(window.refresh_timers[fragment]);
       window.refresh_timers[fragment] = setTimeout(function() {
