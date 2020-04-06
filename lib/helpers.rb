@@ -79,7 +79,7 @@ module Helpers
 
     if name && delegate_name = SemuxExplorer::API.address_name(address)
       if main_resource?(delegate_name: delegate_name)
-        delegate_link = "<span class=\"text-warning\">#{delegate_name}</a> "
+        delegate_link = "<span class=\"text-warning\">#{delegate_name}</span> "
       else
         delegate_link = "<a class=\"text-warning\" href=\"/delegate/#{delegate_name}\">#{delegate_name}</a> "
       end
