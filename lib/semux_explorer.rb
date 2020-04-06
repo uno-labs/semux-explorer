@@ -18,6 +18,8 @@ class SemuxExplorer < Roda
     show_not_found
   end
 
+  FRAGMENTS = ['last_block']
+
   route do |r|
     start_timer
     @path_parts = r.path.split('/').reject(&:empty?)
@@ -44,6 +46,11 @@ class SemuxExplorer < Roda
     r.on 'transaction', String do |transaction_hash|
       @transaction = API.transaction_get(transaction_hash) || show_not_found
       view :'transaction/view'
+    end
+
+    r.on 'fragment', String, String do |_, fragment|
+      show_not_found unless FRAGMENTS.include?(fragment)
+      render "part/#{fragment}"
     end
 
     r.root do

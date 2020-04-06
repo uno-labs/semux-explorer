@@ -82,6 +82,18 @@ module SemuxExplorerAPI
       @last_block ||= block_get_last
     end
 
+    PERFECT_BLOCK_DURATION = 30.0
+
+    def next_block_wait_time
+      last_block_time = DateTime.strptime(last_block.timestamp.to_s, "%Q").to_time
+      host_to_block_delay = Time.now - last_block_time
+      $last_host_to_block_delay ||= host_to_block_delay
+      $last_host_to_block_delay = host_to_block_delay if host_to_block_delay > $last_host_to_block_delay
+      expected_wait_time = last_block_time + $last_host_to_block_delay - Time.now
+      $last_host_to_block_delay -= (expected_wait_time - PERFECT_BLOCK_DURATION) if expected_wait_time > PERFECT_BLOCK_DURATION
+      expected_wait_time
+    end
+
     def backend_time
       backend_times.inject(0.0) { |all, time| all + time[1] }
     end
@@ -115,7 +127,7 @@ module SemuxExplorerAPI
     end
 
     def cached_post(body, key_hash)
-      if false && ENV['RACK_ENV'] == 'development'
+      if ENV['RACK_ENV'] == 'development'
         post(body)
       else
         if data = @cache.get(key_hash)

@@ -1,10 +1,5 @@
 ﻿window.prepare = function(body) {
-  var times = body.getElementsByTagName('time');
-  for (var i=0; i < times.length; i++) {
-    if (times[i].className.split(/\s+/).indexOf('local') !== -1 && times[i].dateTime) {
-      times[i].innerHTML = (new Date(times[i].dateTime)).toLocaleString(navigator.languages);
-    }
-  }
+  window.translate_dates(body);
 
   var delegates_table = body.querySelector('table#delegates');
   if (delegates_table) {
@@ -21,6 +16,50 @@
       delegates_search.form.addEventListener('submit', function(event) { event.preventDefault() });
       delegates_search.value = (localStorage.getItem('filter_delegates')||'');
       window.filter_delegates(body, delegates_search.value);
+    }
+  }
+
+  if (!window.refresh_timers) window.refresh_timers = {};
+  for (var i in window.refresh_timers) clearTimeout(window.refresh_timers[i]);
+  var fragments = body.querySelectorAll('.auto-refresh').forEach(window.add_refresh_timer);
+};
+
+window.add_refresh_timer = function(element) {
+  var timeout = parseFloat(element.getAttribute('data-refresh')) || 1.0;
+  var fragment = element.getAttribute('data-fragment');
+  clearTimeout(window.refresh_timers[fragment]);
+  window.refresh_timers[fragment] = setTimeout(function() {
+    window.refresh_fragment(fragment);
+  }, timeout * 1000.0);
+};
+
+window.refresh_fragment = function(fragment) {
+  clearTimeout(window.refresh_timers[fragment]);
+  window.refresh_timers[fragment] = null;
+
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', '/fragment/'+fragment);
+  xhr.onload = function() {
+    if (xhr.status === 200) {
+      var element = document.querySelector('[data-fragment="'+fragment+'"]');
+      var parent = element.parentNode;
+      element.outerHTML = xhr.responseText;
+      window.add_refresh_timer(parent.lastChild);
+    }else{
+      clearTimeout(window.refresh_timers[fragment]);
+      window.refresh_timers[fragment] = setTimeout(function() {
+        window.refresh_fragment(fragment);
+      }, 1000.0);
+    }
+  };
+  xhr.send();
+};
+
+window.translate_dates = function(body) {
+  var times = body.getElementsByTagName('time');
+  for (var i=0; i < times.length; i++) {
+    if (times[i].className.split(/\s+/).indexOf('local') !== -1 && times[i].dateTime) {
+      times[i].innerHTML = (new Date(times[i].dateTime)).toLocaleString(navigator.languages);
     }
   }
 };

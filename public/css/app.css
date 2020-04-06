@@ -185,3 +185,25 @@ table#delegates .favorite td:nth-child(1):after, table#delegates .favorite th:nt
   top: 0; bottom: 0;
   padding: inherit;
 }
+
+.last-block .fill {
+  background: #3498DB;
+  height: 1px;
+}
+
+.last-block .fill .meter {
+  float: right;
+  height: 100%;
+  background-color: #000;
+  animation: progressBar 30s linear;
+  animation-fill-mode: both;
+}
+
+@keyframes progressBar {
+  0% { width: 100%; }
+  100% { width: 0%; }
+}
+
+.last-block[data-refresh="1.0"] .fill {
+  background: #E74C3C;
+}

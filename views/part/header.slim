@@ -5,9 +5,4 @@ nav.navbar.navbar-expand-lg.navbar-dark.bg-secondary.main-nav.card-body.py-3
     img src="/img/semux-logo.png" alt="Semux logo"
     = site_title
 
-  .text-right
-    small.text-muted Last block
-    br
-    == block_link API.last_block.id, label: API.last_block.id.to_s
-    |  @ 
-    == timestamp_time(API.last_block.timestamp, local: true)
+  == render 'part/last_block'

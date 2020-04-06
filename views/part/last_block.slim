@@ -1,0 +1,14 @@
+- duration = API.next_block_wait_time.round(3)
+- duration = 30.0 if duration > 30.0
+- duration = 1.0 if duration < 1.0
+
+.last-block.text-right.auto-refresh data-fragment="part/last_block" data-refresh=duration
+  small.text-muted Last block by 
+  == address_link(API.last_block.forged_by_addr_hash)
+  br
+  == block_link API.last_block.id, label: API.last_block.id.to_s
+  |  @ 
+  == timestamp_time(API.last_block.timestamp, local: true)
+
+  .fill style="padding-left:#{(100.0-duration/30.0*100.0).round(3)}%"
+    .meter style="animation-duration:#{duration}s"
