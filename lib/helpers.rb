@@ -119,7 +119,7 @@ module Helpers
   def external_link(target, object, data)
     case target
     when :'semux.info'
-      base = "https://semux.info/explorer"
+      base = "#{ENV['SEMUX_INFO_ORIGIN']}/explorer"
       case object
       when :address
         "<a href=\"#{base}/account/#{data}\" target=\"_blank\">🔗 at semux.info</a>"
