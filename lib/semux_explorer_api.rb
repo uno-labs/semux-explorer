@@ -78,6 +78,11 @@ module SemuxExplorerAPI
       @address_names.key(name.to_s)
     end
 
+    def validators_count
+      delegates_get if @address_names.nil?
+      @validators_count
+    end
+
     def last_block
       @last_block ||= block_get_last
     end
@@ -101,6 +106,7 @@ module SemuxExplorerAPI
     private
 
     def save_address_names(delegates)
+      @validators_count = delegates.count{ |delegate| delegate.state == 'VALIDATOR' }
       @address_names = Hash[delegates.map{ |delegate| [delegate.addr, delegate.name] }]
     end
 

@@ -35,4 +35,4 @@ section.card.information.delegate-information
           == external_link :'semux.info', :block, @address.delegate_block_id
 
       dt> Position in delegate list
-      dd> #{@address.delegate_pos}/100
+      dd> #{@address.delegate_pos}/#{API.validators_count}
