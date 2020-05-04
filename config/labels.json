@@ -13,6 +13,7 @@
   },
   "Exchange": {
     "0x8197987c401a3466ad678b2080b24838ebd95b41": "STEX exchange",
+    "0xa4029ed6f48b2646b6c9bee75255f4c72f04f976": "TOKOK exchange"
     "0x35d609897981c9e26c9fd14588ff77acc71771ad": "CITEX exchange",
     "0x0bf9e08ec7f34fd2f9b503a132915b1880cba7f7": "P2PB2B exchange"
   }
