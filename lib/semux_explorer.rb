@@ -8,6 +8,7 @@ class SemuxExplorer < Roda
 
   include Helpers
 
+  plugin :slash_path_empty
   plugin :render, :engine => 'slim'
   plugin :static, ['/img', '/css', '/js', '/favicon.ico', '/robots.txt']
   plugin :error_handler do |error|
