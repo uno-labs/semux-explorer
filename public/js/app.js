@@ -23,6 +23,8 @@ window.prepare = function(body) {
   for (var i in window.refresh_timers) clearTimeout(window.refresh_timers[i]);
   window.auto_refresh_done_event = new Event('auto-refresh-done');
   var fragments = body.querySelectorAll('.auto-refresh').forEach(window.add_refresh_timer);
+
+  if (window.prepare_wallet) window.prepare_wallet(body);
 };
 
 window.add_refresh_timer = function(element) {

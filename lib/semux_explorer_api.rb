@@ -72,5 +72,21 @@ module SemuxExplorerAPI
     def backend_time
       Extender.response_times.inject(0.0) { |all, time| all + time[1] }
     end
+
+    def get_nonce(address)
+      fail Extender::InvalidAddress unless address.match /^0x[\da-fA-F]{40}$/
+      account_nonce = Native.account(address)["result"]["nonce"].to_i
+      pending_transactions = Array(Native.account_pending_transactions(address)["result"]).select{ |transaction| transaction["from"] == address }
+      pending_transaction_last_nonce = pending_transactions.map{ |transaction| transaction["nonce"].to_i }.max.to_i
+      if pending_transactions.count > 0
+        pending_transaction_last_nonce + 1
+      else
+        account_nonce
+      end.to_i.to_s
+    end
+
+    def broadcast(raw)
+      Native.broadcast_raw_transaction(raw)
+    end
   end
 end

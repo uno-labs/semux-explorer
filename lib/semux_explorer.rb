@@ -61,6 +61,27 @@ class SemuxExplorer < Roda
       render "part/#{fragment}"
     end
 
+    r.on 'wallet' do
+      response['Access-Control-Allow-Origin'] = '*'
+
+      tag = r.params["tag"]
+      tag = light_core_tags.last unless light_core_tags.include?(tag)
+
+      r.get 'nonce', String do |address|
+        response['Content-Type'] = @_error_content_type = 'text/plain'
+        API.get_nonce(address)
+      end
+
+      r.post 'broadcast' do
+        response['Content-Type'] = @_error_content_type = 'application/json'
+        JSON.pretty_generate(API.broadcast(r.params['raw']))
+      end
+
+      r.is do
+        view :'wallet/view', :locals => { :semux_light_core_js => "/js/semux-light-core/#{tag}/UnoSemuxLightCoreWasm.js" }
+      end
+    end
+
     r.root do
       @delegates = API.delegates_get
       @delegates.sort_by! do |delegate|

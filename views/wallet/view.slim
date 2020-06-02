@@ -1,0 +1,64 @@
+== render 'part/header'
+
+script src='/js/wallet.js?v=9'
+script src=semux_light_core_js
+
+section.card.wallet.wallet-transfer
+  .card-body.row
+    .col-lg-6
+      fieldset.prepare
+        legend Prepare your transaction
+
+        input#network-type type="hidden" value=network_type
+        input#transaction-type type="hidden" value="TRANSFER"
+
+        .form-group
+          label Mnemonic phrase
+          input.form-control.form-control-sm#mnemonic-phrase type="text" placeholder="mnemonic phrase consists of 12 words" autocomplete="off" value="" data-invalid_format="Mnemonic phrase can't be empty"
+          small.form-text.text-muted we will never save, transfer or share your mnemonic phrase
+
+        .form-group
+          .custom-control.custom-switch
+            input.custom-control-input#mnemonic-password-protected type="checkbox" data-prompt="Enter the password to your mnemonic phrase"
+            label.custom-control-label for="mnemonic-password-protected" mnemonic phrase is password protected
+
+        .form-group
+          label To address
+          input.form-control.form-control-sm#to-address autocomplete="semux-address" data-invalid_format="Invalid address format. Proper format is `0x` and then 40 hex digits"
+          small.form-text.text-muted Example: 0xaead8f219067fcfafe1f6d967a5919e560479de2
+
+        .form-group
+          label SEM amount
+          input.form-control.form-control-sm#sem-amount autocomplete="semux-amount" data-invalid_format="Invalid number format. Please use positive float or integer"
+
+        button.btn.btn-primary.mb-2#prepare-transaction Prepare
+        small.form-text
+          | This operation is safe and your transaction won't be broadcasted to the network. You can review generated transaction before broadcasting it.
+        small.form-text.text-muted
+          | To get nonce for your new transaction your browser will send public address generated from your mnemonic phrase to our backend. This does not transfer your private keys. The backend will reply with nonce.
+
+    .col-lg-6
+      fieldset.commit.d-none
+        legend Review and send your transaction
+
+        dl
+          dt From address
+          dd#review-from-address
+
+          dd#review-sem-amount
+
+          dt To address
+          dd#review-to-address
+
+        button.btn.btn-warning.mb-2#commit-transaction Commit
+        small.form-text
+          | Please review your transaction and ensure everything is correct.
+        small.form-text
+          | This operation is irreversible. After backend receives transaction signature you can't rollback your transaction.
+
+      fieldset.result.d-none
+        legend Transactions result
+
+        #transactions-result
+
+== render 'part/footer'

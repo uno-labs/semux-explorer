@@ -217,4 +217,19 @@ module Helpers
   def error_http_status(error)
     ERROR_STATUS_MAP[error.class] || 500
   end
+
+  def light_core_tags
+    Dir.glob('public/js/semux-light-core/*').select{ |file| File.directory?(file) }.map{ |file| File.basename(file) }
+  end
+
+  def network_type
+    case SemuxExplorerAPI::API.validators_count
+    when 100
+      "MAINNET"
+    when 10
+      "TESTNET"
+    else
+      "DEVNET"
+    end
+  end
 end

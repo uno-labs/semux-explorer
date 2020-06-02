@@ -207,3 +207,9 @@ table#delegates .favorite td:nth-child(1):after, table#delegates .favorite th:nt
 .last-block[data-refresh="1.0"] .fill {
   background: #E74C3C;
 }
+
+/* wallet styles */
+#transactions-result p {
+  word-break: break-all;
+}
+/* end wallet styles */
