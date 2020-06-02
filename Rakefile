@@ -27,7 +27,6 @@ task :getwasm do
   require 'fileutils'
   require 'open-uri'
   require 'json'
-  require 'awesome_print'
   require 'tempfile'
   require 'rubygems/package'
   require 'zlib'
