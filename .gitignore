@@ -1,5 +1,5 @@
 config/.env
-config/credentials.json
+config/extender_credentials.json
 .bundle
 vendor
 logs
