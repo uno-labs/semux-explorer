@@ -208,9 +208,9 @@ module Helpers
   end
 
   ERROR_STATUS_MAP = {
-    SemuxExplorerAPI::InvalidCredentials => 500,
-    SemuxExplorerAPI::InvalidAddress => 400,
-    SemuxExplorerAPI::BackendError => 502,
+    SemuxExplorerAPI::Extender::InvalidCredentials => 500,
+    SemuxExplorerAPI::Extender::InvalidAddress => 400,
+    SemuxExplorerAPI::Extender::BackendError => 502,
     NotFoundError => 404,
   }
 
