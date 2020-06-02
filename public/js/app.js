@@ -21,6 +21,7 @@ window.prepare = function(body) {
 
   if (!window.refresh_timers) window.refresh_timers = {};
   for (var i in window.refresh_timers) clearTimeout(window.refresh_timers[i]);
+  window.auto_refresh_done_event = new Event('auto-refresh-done');
   var fragments = body.querySelectorAll('.auto-refresh').forEach(window.add_refresh_timer);
 };
 
@@ -46,6 +47,9 @@ window.refresh_fragment = function(fragment) {
       element.outerHTML = xhr.responseText;
       window.add_refresh_timer(parent.lastChild);
       window.translate_dates(parent.lastChild);
+      if (!xhr.responseText.match(/data-refresh="1.0"/)) {
+        parent.dispatchEvent(window.auto_refresh_done_event);
+      }
     }else{
       clearTimeout(window.refresh_timers[fragment]);
       window.refresh_timers[fragment] = setTimeout(function() {
