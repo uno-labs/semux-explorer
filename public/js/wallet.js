@@ -15,7 +15,7 @@ window.prepare_wallet = function(body) {
 };
 
 window.refresh_pending_transaction = function(event) {
-  var transaction_hashes = document.querySelector('.last-block').dataset.transactions.split(',');
+  var transaction_hashes = (document.querySelector('.last-block').dataset.transactions || '').split(',');
 
   for (var i = 0; i < transaction_hashes.length; i++) {
     var pending_transaction_link = document.querySelector('a.transaction-pending[data-hash="' + transaction_hashes[i] + '"]');
