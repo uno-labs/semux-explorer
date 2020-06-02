@@ -1,8 +1,9 @@
 - duration = API.next_block_wait_time.round(3)
 - duration = 30.0 if duration > 30.0
 - duration = 1.0 if duration < 1.0
+- transaction_hashes = (API.last_block.transactions_count > 1) ? API.block_transactions(API.last_block.id).map{ |transaction| transaction[:hash] }.join(',') : nil
 
-.last-block.text-right.auto-refresh data-fragment="part/last_block" data-refresh=duration
+.last-block.text-right.auto-refresh data-fragment="part/last_block" data-refresh=duration data-transactions=transaction_hashes
   small.text-muted Last block by 
   == address_link(API.last_block.forged_by_addr_hash)
   br
