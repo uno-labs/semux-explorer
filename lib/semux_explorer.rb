@@ -13,7 +13,14 @@ class SemuxExplorer < Roda
   plugin :static, ['/img', '/css', '/js', '/favicon.ico', '/robots.txt']
   plugin :error_handler do |error|
     response.status = error_http_status(error)
-    view :error, :locals => { :error => error }
+    case @_error_content_type
+    when 'text/plain'
+      error.message
+    when 'application/json'
+      { :success => false, :message => error.message }
+    else
+      view :error, :locals => { :error => error }
+    end
   end
   plugin :not_found do
     show_not_found
