@@ -7,7 +7,11 @@ irb = proc do |env|
   else
     "#{FileUtils::RUBY} -S irb"
   end
-  sh "#{cmd} -r ./lib/semux_explorer.rb"
+  File.read('config/.env').each_line do |line|
+    name, value = line.strip.split('=')
+    ENV[name.strip] = value.strip.sub(/^["'](.*)["']$/, '\1')
+  end
+  sh "#{cmd} -r ./lib/cli.rb"
 end
 
 desc "Open irb shell in development mode"
