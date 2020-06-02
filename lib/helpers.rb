@@ -211,6 +211,7 @@ module Helpers
     SemuxExplorerAPI::Extender::InvalidCredentials => 500,
     SemuxExplorerAPI::Extender::InvalidAddress => 400,
     SemuxExplorerAPI::Extender::BackendError => 502,
+    SemuxExplorerAPI::Native::BackendError => 502,
     NotFoundError => 404,
   }
 

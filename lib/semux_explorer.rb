@@ -13,11 +13,15 @@ class SemuxExplorer < Roda
   plugin :static, ['/img', '/css', '/js', '/favicon.ico', '/robots.txt']
   plugin :error_handler do |error|
     response.status = error_http_status(error)
+    message = error.message
+    if ENV['RACK_ENV'] == 'developmecnt'
+      error.backtrace.each{ |source| message << "\n" << source }
+    end
     case @_error_content_type
     when 'text/plain'
-      error.message
+      message
     when 'application/json'
-      { :success => false, :message => error.message }
+      { :success => false, :message => message }
     else
       view :error, :locals => { :error => error }
     end

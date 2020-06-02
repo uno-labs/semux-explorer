@@ -4,8 +4,10 @@ module SemuxExplorerAPI
   module Native
     extend self
 
+    class BackendError < StandardError; def backtrace; []; end; end
+
     def base_uri
-      @base_uri ||= ENV['BACKEND_SEMUX_API_BASE']
+      @base_uri ||= nil + ENV['BACKEND_SEMUX_API_BASE'] || fail(BackendError.new 'BACKEND_SEMUX_API_BASE not defined in env')
     end
 
     def account(address)
